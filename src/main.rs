@@ -9,6 +9,7 @@ const CALENDAR_X_OFFSET: i32 = 420;
 const TEMPERATURE_X_OFFSET: i32 = 20;
 const FONT_SIZE: f32 = 34.0;
 const TEMPERATURE_FONT_SIZE: f32 = 120.0;
+const TIME_FONT_SIZE: f32 = 40.0;
 
 // Acquire temperature from OpenWeather
 fn get_temperature() -> String {
@@ -22,6 +23,11 @@ fn get_temperature() -> String {
     let temp = data["main"]["temp"].as_f64().unwrap();
     let temp = (temp * 10.0).round() / 10.0;
     temp.to_string()
+}
+
+fn get_current_time() -> String {
+    let now = chrono::Local::now();
+    now.format("%d.%m. %H:%M").to_string()
 }
 
 fn main() {
@@ -81,6 +87,26 @@ fn main() {
     let y = 200.0;
     // let temperature = "20.0".to_string();
     let glyphs: Vec<_> = font.layout(&temperature, scale, point(0.0, y)).collect();
+    let width = glyphs.iter().rev().next().unwrap().position().x as u32;
+    let x = (MAX_WIDTH - width) / 2;
+    for glyph in glyphs {
+        if let Some(bb) = glyph.pixel_bounding_box() {
+            glyph.draw(|x, y, v| {
+                let x = x as i32 + bb.min.x + TEMPERATURE_X_OFFSET;
+                let y = y as i32 + bb.min.y;
+                let coverage = 255 - ((v * 255.0) as u8);
+                if x>=0 && y>=0 && x<MAX_WIDTH as i32 && y<MAX_HEIGHT as i32 {
+                    img.put_pixel(x as u32, y as u32, Rgb([coverage, coverage, coverage]));
+                }
+            })
+        }
+    }
+
+    let current_time = get_current_time();
+    let scale = rusttype::Scale::uniform(TIME_FONT_SIZE);
+    let y = 400.0;
+    // let temperature = "20.0".to_string();
+    let glyphs: Vec<_> = font.layout(&current_time, scale, point(0.0, y)).collect();
     let width = glyphs.iter().rev().next().unwrap().position().x as u32;
     let x = (MAX_WIDTH - width) / 2;
     for glyph in glyphs {
