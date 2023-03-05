@@ -5,10 +5,10 @@ use image::{ImageBuffer, Rgb};
 
 const MAX_WIDTH: u32 = 960;
 const MAX_HEIGHT: u32 = 540;
-const CALENDAR_X_OFFSET: i32 = 400;
+const CALENDAR_X_OFFSET: i32 = 420;
 const TEMPERATURE_X_OFFSET: i32 = 20;
 const FONT_SIZE: f32 = 34.0;
-const TEMPERATURE_FONT_SIZE: f32 = 100.0;
+const TEMPERATURE_FONT_SIZE: f32 = 120.0;
 
 // Acquire temperature from OpenWeather
 fn get_temperature() -> String {
