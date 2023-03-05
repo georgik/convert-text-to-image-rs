@@ -5,7 +5,8 @@ use image::{ImageBuffer, Rgb};
 
 const MAX_WIDTH: u32 = 960;
 const MAX_HEIGHT: u32 = 540;
-const CALENDAR_X_OFFSET: i32 = 200;
+const CALENDAR_X_OFFSET: i32 = 400;
+const FONT_SIZE: f32 = 34.0;
 
 fn main() {
     // Load text from file
@@ -20,7 +21,7 @@ fn main() {
         .collect();
 
     // Calculate height of the image
-    let line_height = 20;
+    let line_height = 34;
     let padding = 10;
     let height = line_height * lines.len() as u32 + padding * 2;
 
@@ -30,7 +31,7 @@ fn main() {
 
     // Draw text onto image buffer
     let font = rusttype::Font::try_from_bytes(include_bytes!("../DejaVuSans.ttf")).unwrap();
-    let scale = rusttype::Scale::uniform(24.0);
+    let scale = rusttype::Scale::uniform(FONT_SIZE);
     let v_metrics = font.v_metrics(scale);
     let mut y = padding as f32 + v_metrics.ascent;
 
